@@ -154,3 +154,8 @@ img3 = speech_bubble(s, base=3, fgColor=(0,128,255))
 img1.save("img1.png")
 img2.save("img2.png")
 img3.save("img3.png")
+
+r = """Kraken
+Keyboards"""
+
+speech_bubble(r, isHorizontal=True, fgColor=alienGreen).save('kraken_keyboards.png')
