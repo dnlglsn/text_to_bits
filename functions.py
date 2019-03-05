@@ -39,15 +39,15 @@ def num_to_bits(x, base=defaultBase, numBits=None):
 def char_to_bits(c, base=defaultBase, numBits=None, charMap=chars):
     try:
         return num_to_bits(char_to_num(c, charMap), base, numBits)
-    except RuntimeError, e:
-        print e
+    except RuntimeError as e:
+        print(e)
         raise RuntimeError("Unable to hold %c's position (%i) in charmap [%s] with base %i and %i bits. Raise base, numBits, or change charMap." % (
             c, charMap.find(c), charMap, base, numBits))
 
 
 def line_to_bit_array(l, base=defaultBase, numBits=None, charMap=chars):
     # We need to figure out the numbits for the maximum char
-    if numBits == None:
+    if numBits is None:
         maxChar = max([chars.find(c) for c in s])
         numBits = len(num_to_bits(maxChar, base))
     return [char_to_bits(c, base, numBits, charMap) for c in l]
@@ -174,3 +174,8 @@ Then the Grasshopper knew..."""
     Keyboards"""
 
     speech_bubble(r, isHorizontal=True, fgColor=alienGreen).save('kraken_keyboards.png')
+
+    charMap = ' abcdefghijklmnopqrstuvwxyz/'
+    speech_bubble('fremont keyboard by /u/dnlglsn', isHorizontal=True, base=2,
+                  charMap=charMap, resizeFactor=16).save("fremont.png")
+    speech_bubble(charMap, base=2, charMap=charMap).save("chars.png")
