@@ -6,7 +6,7 @@ startAsciiRange = 32
 endAsciiRange = 122
 chars = "".join([chr(x) for x in range(startAsciiRange, endAsciiRange + 1)])
 defaultBase = 5
-defaultResizeFactor = 4
+defaultResizeFactor = 10
 
 
 def char_to_num(c, charMap=chars):
@@ -29,7 +29,7 @@ def num_to_bits(x, base=defaultBase, numBits=None):
     digits = []
     while x:
         digits.append(x % base)
-        x /= base
+        x //= base
     if numBits:
         digits += [0] * (numBits - len(digits))
     digits.reverse()
@@ -91,13 +91,13 @@ def string_to_array(s, base=defaultBase, numBits=None, charMap=chars, isHorizont
         if isHorizontal:
             returnMe = numpy.vstack([row.T for row in reshaped])
             if addSpaces:
-                splitArray = numpy.vsplit(returnMe, returnMe.shape[0] / numBits)
+                splitArray = numpy.vsplit(returnMe, returnMe.shape[0] // numBits)
                 # Add spaces between the split sub-arrays
                 returnMe = numpy.vstack([numpy.vstack([section, [0] * numChars]) for section in splitArray])[:-1]
         else:
             returnMe = numpy.hstack(reshaped)
             if addSpaces:
-                splitArray = numpy.hsplit(returnMe, returnMe.shape[1] / numBits)
+                splitArray = numpy.hsplit(returnMe, returnMe.shape[1] // numBits)
                 # Add spaces between the split sub-arrays
                 returnMe = numpy.hstack([numpy.vstack([numpy.hstack([item, [0]]) for item in section])
                                          for section in splitArray])[:, :-1]
@@ -119,7 +119,7 @@ def scale_array(array, scale=255, base=defaultBase):
 def resize(image, resizeFactor=defaultResizeFactor):
     newWidth = image.size[1] * resizeFactor
     newHeight = image.size[0] * resizeFactor
-    resized = image.resize((newHeight, newWidth))
+    resized = image.resize((newHeight, newWidth), Image.Resampling.NEAREST)
     return resized
 
 
@@ -169,6 +169,9 @@ Then the Grasshopper knew..."""
     img1.save("img1.png")
     img2.save("img2.png")
     img3.save("img3.png")
+
+    img4 = speech_bubble('We have 8 weeks to worry about prod.', fgColor="red")
+    img4.save("img4.png")
 
     r = """Kraken
     Keyboards"""
